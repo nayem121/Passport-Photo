@@ -45,7 +45,7 @@
 
 4. Run the application:
    ```bash
-   python PassportPhoto.py
+   python Passport.py
    ```
 
 ---
