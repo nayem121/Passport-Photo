@@ -1,7 +1,7 @@
 
 # Passport Photo Maker Studio
 
-**Passport Photo** is a desktop application designed to simplify the creation of professional-quality passport, visa, and ID photos. With advanced features like automatic face detection, background removal, and resizing options, this tool is ideal for anyone who needs standardized photos for official purposes.
+**Passport Photo Maker Studio** is a desktop application designed to simplify the creation of professional-quality passport, visa, and ID photos. With advanced features like automatic face detection, background removal, and resizing options, this tool is ideal for anyone who needs standardized photos for official purposes.
 
 ---
 
