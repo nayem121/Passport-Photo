@@ -103,4 +103,4 @@ This project is licensed under the MIT License. See the **[license](https://gith
 
 ## Author
 Created by **[Nayem Uddin Chowdhury](https://github.com/nayem121)**  
-For any inquiries, visit [My Facebook](https://facebook.com/nayem121).
+For any inquiries, visit [My Facebook profile](https://facebook.com/nayem121).
