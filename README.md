@@ -19,9 +19,7 @@
 ---
 
 ## Screenshots
-*(https://github.com/nayem121/Passport-Photo/blob/main/test.png)*
-
----
+![ScreenShot](https://github.com/nayem121/Passport-Photo/blob/main/test.png?raw=true)
 
 ## Installation
 
