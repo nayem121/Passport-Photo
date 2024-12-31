@@ -1,106 +1,121 @@
+# Passport Photo Maker Studio V0.3
 
-# Passport Photo Maker Studio
-
-**Passport Photo Maker Studio** is a desktop application designed to simplify the creation of professional-quality passport, visa, and ID photos. With advanced features like automatic face detection, background removal, and resizing options, this tool is ideal for anyone who needs standardized photos for official purposes.
+A powerful and easy-to-use tool for creating professional passport photos with advanced features like face detection, background removal, and more.
 
 ---
 
 ## Features
-- **Automatic Face Detection**: Detects and crops the face to focus on the subject.
-- **Background Removal**: Removes the background and replaces it with a solid color.
-- **Custom Resizing Options**:
-  - Passport size (413x531 px)
-  - Application sizes (200x200 px, 300x300 px)
-- **Image Enhancement**:
-  - Grain removal
-  - Upscaling with customizable levels
-- **User-Friendly Interface**: An intuitive GUI built with Tkinter for seamless interaction.
+
+- **Face Detection and Cropping**
+  Automatically detects and crops the largest face for accurate passport photo creation.
+
+- **Background Removal**
+  Remove backgrounds with one click and replace them with a solid color (default: sky blue).
+
+- **Customizable Sizes**
+  - Passport size (413x531px).
+  - Application sizes (200x200px and 300x300px).
+
+- **Denoising**
+  - Option to remove noise or grain from images with adjustable intensity.
+
+- **Image Upscaling**
+  - Upscale images 2x to 8x for enhanced quality.
+
+- **PDF Export**
+  - Save processed images as a PDF with four photos arranged for A4 printing.
+
+- **Drag-and-Drop Support**
+  - Quickly load images by dragging and dropping them into the application.
+
+- **Progress Indicators**
+  - Visual progress bar with status updates during processing.
 
 ---
 
-## Screenshots
-![ScreenShot](https://github.com/nayem121/Passport-Photo/blob/main/test.png?raw=true)
+## What's New in V0.3
+
+1. **Face Detection and Cropping**
+   - Automatically detects and crops the largest face using OpenCV's Haar Cascade.
+
+2. **Denoising Feature**
+   - Added an option to remove grain/noise with adjustable intensity.
+
+3. **PDF Export**
+   - Generates a PDF with four images arranged for printing on A4 paper.
+
+4. **Drag-and-Drop Support**
+   - Quickly load images by dragging and dropping them into the app.
+
+5. **Custom Resizing Options**
+   - New presets for resizing to passport size (413x531px) and application sizes (200x200px, 300x300px).
+
+6. **Progress Indicators**
+   - Added a visual progress bar and text updates during processing.
+
+7. **Enhanced Background Removal**
+   - Improved background removal with customizable replacement color.
+
+8. **Adjustable Upscaling**
+   - Added a slider for upscaling images from 2x to 8x.
+
+---
 
 ## Installation
 
-### Prerequisites
-- Python 3.7 or higher
-- `pip` (Python package installer)
-
-### Steps
-1. Clone the repository:
+1. Clone this repository:
    ```bash
-   git clone https://github.com/nayem121/passport-photo.git
-   cd passport-photo-maker
+   git clone https://github.com/nayem121/Passport-Photo.git
    ```
 
-2. Install the required dependencies:
+2. Navigate to the project directory:
+   ```bash
+   cd Passport-Photo
+   ```
+
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Download the `haarcascade_frontalface_default.xml` file (included in the repository). This is required for face detection.
-
 4. Run the application:
    ```bash
-   python Passport.py
+   python PassportPhoto.py
    ```
-
----
-
-## Usage
-1. **Upload an Image**:
-   - Click "Choose Image" to select your input photo.
-2. **Set Options**:
-   - Choose the upscale level, enable grain removal, and select the desired output size.
-3. **Process Image**:
-   - Click "Process" to detect the face, remove the background, and resize the image.
-4. **Save Image**:
-   - After processing, click "Save Image" to export your final photo.
-
----
-
-## Building as an Executable
-To distribute the application as a standalone executable, use **PyInstaller**:
-1. Install PyInstaller:
-   ```bash
-   pip install pyinstaller
-   ```
-
-2. Run the following command to build:
-   ```bash
-   pyinstaller --onefile --add-data "haarcascade_frontalface_default.xml;." PassportPhoto.py
-   ```
-
-3. The executable will be available in the `dist` directory.
 
 ---
 
 ## Dependencies
-The project uses the following Python libraries:
-- `opencv-python` (Image processing and face detection)
-- `numpy` (Image array manipulation)
-- `Pillow` (Image handling for GUI)
-- `rembg` (Background removal)
-- `tk` and `ttkbootstrap` (GUI components and styling)
 
-Install them with:
-```bash
-pip install -r requirements.txt
-```
+- Python 3.8+
+- OpenCV
+- NumPy
+- Pillow
+- rembg
+- FPDF
+- tkinterdnd2
+
+Install all dependencies with the provided `requirements.txt` file.
 
 ---
 
-## Contributing
-Contributions are welcome! If you have suggestions or improvements, feel free to fork the repository and submit a pull request.
+## Usage
+
+1. Launch the application.
+2. Load an image by selecting a file or dragging and dropping it into the app.
+3. Adjust the settings as needed (e.g., remove background, upscale, resize).
+4. Click "Process" to apply changes.
+5. Save the processed image or export it as a PDF.
 
 ---
 
 ## License
-This project is licensed under the MIT License. See the **[license](https://github.com/nayem121/Passport-Photo?tab=MIT-1-ov-file)** file for details.
+
+This project is licensed under the MIT License.
 
 ---
 
-## Author
-Created by **[Nayem Uddin Chowdhury](https://github.com/nayem121)**  
-For any inquiries, visit [My Facebook profile](https://facebook.com/nayem121).
+## Credits
+
+Developed by Nayem Uddin Chowdhury. Visit [GitHub](https://github.com/nayem121) for more projects and updates.
+

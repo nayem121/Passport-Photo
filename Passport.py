@@ -6,14 +6,21 @@ from tkinter import Tk, Label, Button, Scale, Checkbutton, IntVar, filedialog
 from tkinter import ttk
 from PIL import Image, ImageTk
 from rembg import remove
+from fpdf import FPDF
 import webbrowser
 import threading
 import queue
+from tkinterdnd2 import TkinterDnD, DND_FILES
 
 class PassportPhoto:
     def __init__(self, master):
         self.master = master
-        master.title("Passport Photo Maker Studio | V0.2")
+        master.title("Passport Photo Maker Studio | V0.3")
+
+        # Enable window dragging
+        self._drag_data = {"x": 0, "y": 0}
+        master.bind("<Button-1>", self.on_drag_start)
+        master.bind("<B1-Motion>", self.on_drag_motion)
 
         # UI elements
         self.output_label = Label(master, text="Output Image:")
@@ -69,14 +76,17 @@ class PassportPhoto:
         self.save_button = Button(master, text="Save Image", command=self.save_image, state="disabled")
         self.save_button.grid(row=9, column=1, columnspan=2, padx=5, pady=5)
 
-        self.progress_label = Label(master, text="")
-        self.progress_label.grid(row=10, column=1, columnspan=2, padx=5, pady=5)
+        self.save_pdf_button = Button(master, text="Save 4 Photos PDF", command=self.save_pdf)
+        self.save_pdf_button.grid(row=10, column=1, columnspan=2, padx=5, pady=5)
 
-        self.progress_bar = ttk.Progressbar(master, orient="horizontal", length=200, mode="determinate")
+        self.progress_bar = Label(master, text="", anchor="center", height=2, width=25, bg="#f0f0f0")
         self.progress_bar.grid(row=11, column=1, columnspan=2, padx=5, pady=5)
 
+        self.progress_bar_text = Label(master, text="", anchor="center", fg="black", bg=self.master.cget('bg'))
+        self.progress_bar_text.grid(row=11, column=1, columnspan=2, padx=5, pady=5)
+
         self.copyright_label = Label(
-            master, text="Nayem Uddin Chowdhury © Reserved | V0.2",
+            master, text="Nayem Uddin Chowdhury © Reserved | V0.3",
             fg="blue", cursor="hand2"
         )
         self.copyright_label.grid(row=12, column=1, columnspan=2, padx=5, pady=5)
@@ -90,6 +100,34 @@ class PassportPhoto:
         self.upscaled_image = None
         self.progress_queue = queue.Queue()
         self.processing_thread = None
+
+        # Drag and drop setup
+        self.master.drop_target_register(DND_FILES)
+        self.master.dnd_bind('<<Drop>>', self.on_drop)
+
+    def on_drag_start(self, event):
+        """Record the position of the mouse when drag starts."""
+        self._drag_data["x"] = event.x
+        self._drag_data["y"] = event.y
+
+    def on_drag_motion(self, event):
+        """Move the window according to the mouse movement."""
+        delta_x = event.x - self._drag_data["x"]
+        delta_y = event.y - self._drag_data["y"]
+        new_x = self.master.winfo_x() + delta_x
+        new_y = self.master.winfo_y() + delta_y
+        self.master.geometry(f"+{new_x}+{new_y}")
+
+    def on_drop(self, event):
+        """Handle file drop event."""
+        file_path = event.data
+        if file_path:
+            self.original_image = cv2.imread(file_path)
+            if self.original_image is None:
+                print("Error loading image.")
+                return
+            self.display_image(self.original_image, self.output_image_label)
+            self.save_button.config(state="normal")
 
     def load_image(self):
         file_path = filedialog.askopenfilename(
@@ -127,7 +165,13 @@ class PassportPhoto:
                 self.master.after(100, self.check_queue)
 
     def update_progress(self, step, message):
-        self.progress_queue.put((step, message))
+        # Update the text on the progress bar label (simulated bar)
+        self.progress_bar.config(text=f"{message} ({step}%)")
+        
+        # Update the text on the overlay label
+        self.progress_bar_text.config(text=f"{message} ({step}%)")
+        
+        self.master.update_idletasks()
 
     def process_image(self):
         if self.original_image is not None:
@@ -195,6 +239,48 @@ class PassportPhoto:
             if save_path:
                 cv2.imwrite(save_path, self.upscaled_image)
 
+            self.copy_pdf_buttons = []
+            for i in range(4):
+                btn = Button(self.master, text=f"Copy PDF {i+1}", command=lambda i=i: self.save_pdf(copies=i+1))
+                btn.grid(row=14 + i, column=1, columnspan=2, padx=5, pady=5)
+                self.copy_pdf_buttons.append(btn)
+
+    # New method for saving the PDF
+    def save_pdf(self):
+        if self.upscaled_image is not None:
+            save_path = filedialog.asksaveasfilename(
+                defaultextension=".pdf",
+                filetypes=(("PDF files", "*.pdf"), ("All files", "*.*"))
+            )
+            if save_path:
+                pdf = FPDF(orientation="P", unit="mm", format="A4")
+                pdf.set_auto_page_break(auto=False)
+                pdf.add_page()
+                pdf.set_fill_color(255, 255, 255)
+
+                # Photo dimensions
+                photo_width = 50
+                photo_height = 70
+                max_spacing = 10
+                spacing = max_spacing
+
+                # Adjust spacing to ensure photos fit within page width
+                while (4 * photo_width + 3 * spacing) > 210 and spacing > 0:
+                    spacing -= 1
+
+                start_x = (210 - (4 * photo_width + 3 * spacing)) / 2
+                start_y = 10  # Top of the page
+
+                temp_file = "temp_image.jpg"
+                cv2.imwrite(temp_file, self.upscaled_image)
+
+                for i in range(4):
+                    x = start_x + i * (photo_width + spacing)
+                    pdf.image(temp_file, x=x, y=start_y, w=photo_width, h=photo_height)
+
+                pdf.output(save_path)
+                os.remove(temp_file)
+
     def display_image(self, image, label):
         resized = cv2.resize(image, (250, 250), interpolation=cv2.INTER_AREA)
         img = Image.fromarray(cv2.cvtColor(resized, cv2.COLOR_BGR2RGB))
@@ -206,6 +292,6 @@ class PassportPhoto:
         webbrowser.open_new("https://github.com/nayem121")
 
 if __name__ == "__main__":
-    root = Tk()
+    root = TkinterDnD.Tk()  # Initialize the TkinterDnD.Tk window here
     app = PassportPhoto(root)
     root.mainloop()

@@ -1,6 +1,6 @@
 opencv-python
 numpy
-Pillow
+pillow
 rembg
-tk
-ttkbootstrap
+fpdf
+tkinterdnd2
